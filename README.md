@@ -135,11 +135,20 @@ pip install -r requirements.txt
 ```
 
 ### Step 4 — Download the dataset
-Go to 👉 https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset
 
-Download `spam.csv` and place it in the **project root folder** (same level as `train_model.py`).
+This project uses the **UCI SMS Spam Collection Dataset**.
+You can download `spam.csv` from any of these sources:
 
-<br>
+| Source | Link |
+|---|---|
+| Kaggle | https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset |
+| UCI ML Repository | https://archive.ics.uci.edu/dataset/228/sms+spam+collection |
+| GitHub (direct) | Search "SMS Spam Collection dataset spam.csv" on GitHub |
+
+> **Note:** The file must be named `spam.csv` and placed in the
+> project root folder (same level as `train_model.py`).
+> The dataset should have two columns — a label column (`ham`/`spam`)
+> and a message column — separated by a tab or comma.
 
 ---
 
