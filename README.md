@@ -16,8 +16,6 @@
 8. [API Endpoints](#api-endpoints)
 9. [Visualisations](#visualisations)
 10. [Future Improvements](#future-improvements)
-11. [Resume Bullet Points](#resume-bullet-points)
-12. [Interview Q&A](#interview-qa)
 
 <br>
 
@@ -254,72 +252,6 @@ Three plots are automatically generated when you run `train_model.py`:
 
 ---
 
-## Resume Bullet Points
-
-```
-• Developed an end-to-end Spam Classifier on 5,572 SMS messages
-  achieving 97.9% accuracy, 96.8% precision, and 95.7% F1-Score
-  using Multinomial Naive Bayes with TF-IDF vectorisation
-  (5,000 features + bigrams)
-
-• Built a complete NLP preprocessing pipeline using NLTK —
-  lowercasing, regex cleaning, stopword removal, and Porter
-  Stemming — reducing raw vocabulary size by ~60%
-
-• Deployed a Flask REST API serving real-time Spam/Ham predictions
-  with confidence scores in under 5ms per request using
-  Pickle-serialised model artefacts
-
-• Performed EDA on an imbalanced dataset (87% Ham, 13% Spam)
-  and applied stratified 80/20 train-test split to ensure
-  reliable evaluation across all metrics
-```
-
-<br>
-
----
-
-## Interview Q&A
-
-<details>
-<summary><strong>Q: Why Multinomial Naive Bayes for text classification?</strong></summary>
-<br>
-It is fast, memory-efficient, and works well even on small datasets. The bag-of-words independence assumption — while technically incorrect — performs surprisingly well for spam detection in practice. It also gives a natural probabilistic output (confidence score).
-</details>
-
-<details>
-<summary><strong>Q: What is TF-IDF and why is it better than raw word counts?</strong></summary>
-<br>
-TF-IDF stands for Term Frequency–Inverse Document Frequency. Raw word counts give high weight to common words like "the" or "is" that appear in every message and carry no signal. TF-IDF balances how often a word appears in a message (TF) against how rare it is across all messages (IDF), so distinctive words like "winner" and "prize" get high scores in spam.
-</details>
-
-<details>
-<summary><strong>Q: Precision vs Recall — which matters more in spam detection?</strong></summary>
-<br>
-Precision = of all messages I labelled spam, how many were truly spam. Recall = of all actual spam, how many did I catch. High Recall is usually more important — missing a spam message is annoying, but incorrectly flagging a legitimate email as spam (false positive, low Precision) is far worse since the user could miss important communication.
-</details>
-
-<details>
-<summary><strong>Q: Why use stratify=y in train_test_split?</strong></summary>
-<br>
-The dataset is imbalanced — roughly 87% Ham and 13% Spam. Without stratification, the test set could end up with a very different class ratio by chance, making accuracy and other metrics unreliable. Stratification ensures both train and test sets preserve the original 87/13 distribution.
-</details>
-
-<details>
-<summary><strong>Q: What is Laplace smoothing (the alpha parameter)?</strong></summary>
-<br>
-If a word appears in the test set but never appeared in training for a given class, its probability would be zero — making the entire product zero and breaking the classifier. Laplace smoothing adds a small constant (alpha=0.1 here) to every word count so no probability is ever exactly zero.
-</details>
-
-<details>
-<summary><strong>Q: How would you improve this model?</strong></summary>
-<br>
-Fine-tune DistilBERT for contextual understanding, add engineered features (URL count, ALL-CAPS ratio, special character density), use k-fold cross-validation instead of a single train/test split for more robust evaluation, and implement active learning to retrain on user-corrected examples over time.
-</details>
-
-<br>
-
----
 
 <div align="center">
 
