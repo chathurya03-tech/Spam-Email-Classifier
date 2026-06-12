@@ -266,6 +266,5 @@ Three plots are automatically generated when you run `train_model.py`:
 
 Built with Python · Scikit-learn · Flask &nbsp;|&nbsp; UCI SMS Spam Collection Dataset
 
-*Portfolio project — 2nd Year B.Tech CSE*
 
 </div>
