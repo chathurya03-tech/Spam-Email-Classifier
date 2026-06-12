@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spam Classifier</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Background blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- Main card -->
+  <main class="card">
+
+    <!-- Header -->
+    <div class="card-header">
+      <div class="header-icon">🛡️</div>
+      <h1>Spam Detector</h1>
+      <p class="subtitle">Powered by Multinomial Naive Bayes &amp; TF-IDF</p>
+    </div>
+
+    <!-- Input area -->
+    <div class="input-section">
+      <label for="messageInput" class="input-label">Enter your message</label>
+      <textarea
+        id="messageInput"
+        placeholder="Paste or type any SMS / email message here…"
+        rows="5"
+      ></textarea>
+      <div class="char-counter"><span id="charCount">0</span> characters</div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="btn-row">
+      <button id="classifyBtn" class="btn btn-primary" onclick="classify()">
+        <span class="btn-icon">🔍</span> Classify Message
+      </button>
+      <button class="btn btn-secondary" onclick="clearAll()">
+        <span class="btn-icon">🗑️</span> Clear
+      </button>
+    </div>
+
+    <!-- Quick demo examples -->
+    <div class="examples-section">
+      <p class="examples-label">Try an example:</p>
+      <div class="example-chips">
+        <button class="chip chip-spam"
+          onclick="loadExample('WINNER!! As a valued network customer you have been selected to receive a £900 prize reward! To claim call 09061701461. Claim code KL341. Valid 12 hours only.')">
+          Spam example
+        </button>
+        <button class="chip chip-ham"
+          onclick="loadExample('Hey, are you free tonight? We are planning to have dinner at 8 PM. Let me know!')">
+          Ham example
+        </button>
+        <button class="chip chip-spam"
+          onclick="loadExample('Free entry in 2 a wkly comp to win FA Cup final tkts 21st May 2005. Text FA to 87121 to receive entry question std txt rate T&amp;C Apply 08452810075over18s')">
+          Classic spam
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading spinner (hidden by default) -->
+    <div id="loadingSpinner" class="spinner hidden">
+      <div class="spinner-ring"></div>
+      <p>Analysing message…</p>
+    </div>
+
+    <!-- Results panel (hidden by default) -->
+    <div id="resultPanel" class="result-panel hidden">
+
+      <!-- Verdict badge -->
+      <div id="verdictBadge" class="verdict-badge">
+        <span id="verdictIcon"></span>
+        <span id="verdictText"></span>
+      </div>
+
+      <!-- Confidence bar -->
+      <div class="confidence-section">
+        <p class="conf-label">Confidence: <strong id="confValue"></strong></p>
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Probability breakdown -->
+      <div class="prob-grid">
+        <div class="prob-card prob-ham">
+          <span class="prob-icon">✅</span>
+          <span class="prob-name">Ham</span>
+          <span id="hamProb" class="prob-value"></span>
+        </div>
+        <div class="prob-card prob-spam">
+          <span class="prob-icon">🚫</span>
+          <span class="prob-name">Spam</span>
+          <span id="spamProb" class="prob-value"></span>
+        </div>
+      </div>
+
+      <!-- Processed text -->
+      <details class="clean-text-details">
+        <summary>View preprocessed text</summary>
+        <p id="cleanText" class="clean-text"></p>
+      </details>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    Built with Python · Scikit-learn · Flask &nbsp;|&nbsp;
+    SMS Spam Collection Dataset · UCI ML Repository
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    const textarea = document.getElementById('messageInput');
+    const charCount = document.getElementById('charCount');
+
+    // Live character counter
+    textarea.addEventListener('input', () => {
+      charCount.textContent = textarea.value.length;
+    });
+
+    // Press Ctrl+Enter to classify
+    textarea.addEventListener('keydown', e => {
+      if (e.ctrlKey && e.key === 'Enter') classify();
+    });
+
+    function loadExample(text) {
+      textarea.value = text;
+      charCount.textContent = text.length;
+      classify();
+    }
+
+    function clearAll() {
+      textarea.value = '';
+      charCount.textContent = 0;
+      document.getElementById('resultPanel').classList.add('hidden');
+      document.getElementById('loadingSpinner').classList.add('hidden');
+    }
+
+    async function classify() {
+      const message = textarea.value.trim();
+      if (!message) { alert('Please enter a message first.'); return; }
+
+      // Show spinner, hide result
+      document.getElementById('loadingSpinner').classList.remove('hidden');
+      document.getElementById('resultPanel').classList.add('hidden');
+      document.getElementById('classifyBtn').disabled = true;
+
+      try {
+        const res  = await fetch('/predict', {
+          method  : 'POST',
+          headers : { 'Content-Type': 'application/json' },
+          body    : JSON.stringify({ message })
+        });
+        const data = await res.json();
+
+        if (data.error) { alert(data.error); return; }
+
+        renderResult(data);
+      } catch (err) {
+        alert('Server error – make sure Flask is running.');
+      } finally {
+        document.getElementById('loadingSpinner').classList.add('hidden');
+        document.getElementById('classifyBtn').disabled = false;
+      }
+    }
+
+    function renderResult(data) {
+      const isSpam = data.prediction === 'Spam';
+      const panel  = document.getElementById('resultPanel');
+
+      // Verdict badge
+      const badge = document.getElementById('verdictBadge');
+      badge.className = 'verdict-badge ' + (isSpam ? 'badge-spam' : 'badge-ham');
+      document.getElementById('verdictIcon').textContent = isSpam ? '🚨' : '✅';
+      document.getElementById('verdictText').textContent = isSpam ? 'SPAM' : 'NOT SPAM (Ham)';
+
+      // Confidence
+      document.getElementById('confValue').textContent = data.confidence + '%';
+      const fill = document.getElementById('progressFill');
+      fill.style.width = data.confidence + '%';
+      fill.style.backgroundColor = isSpam ? '#e74c3c' : '#2ecc71';
+
+      // Probs
+      document.getElementById('hamProb').textContent  = data.ham_prob  + '%';
+      document.getElementById('spamProb').textContent = data.spam_prob + '%';
+
+      // Clean text
+      document.getElementById('cleanText').textContent = data.clean_text || '(empty after preprocessing)';
+
+      panel.classList.remove('hidden');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
+
+</body>
+</html>

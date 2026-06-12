@@ -1,0 +1,17 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.DS_Store
+
+# Generated model files (regenerate with train_model.py)
+models/*.pkl
+
+# Generated plots (regenerate with train_model.py)
+static/eda_plots.png
+static/evaluation_plots.png
+static/top_spam_words.png
+
+# Dataset (too large / not open-licensed for redistribution)
+spam.csv
