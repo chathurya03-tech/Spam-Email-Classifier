@@ -190,10 +190,10 @@ Evaluated on a held-out test set (20% of data, stratified split):
 
 | Metric | Score |
 |---|---|
-| ✅ Accuracy | **97.9%** |
-| 🎯 Precision | **96.8%** |
-| 🔍 Recall | **94.7%** |
-| ⚖️ F1-Score | **95.7%** |
+| ✅ Accuracy | **97.58%** |
+| 🎯 Precision | **96.21%** |
+| 🔍 Recall | **85.23%** |
+| ⚖️ F1-Score | **90.39%** |
 
 > Results may vary slightly due to random train/test split seeding.
 
