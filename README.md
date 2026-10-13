@@ -73,7 +73,7 @@ Spam-Email-Classifier/
 │   ├── spam_model.pkl          ← Trained Naive Bayes classifier (Pickle)
 │   └── tfidf_vectorizer.pkl    ← Fitted TF-IDF Vectorizer (Pickle)
 │
-├── spam.csv                    ← Dataset (download separately — see instructions below)
+├── spam.csv                    ← Dataset (included in repository)
 ├── requirements.txt            ← Project dependencies
 ├── .gitignore                  ← Git ignore rules
 └── README.md                   ← Project documentation
@@ -141,18 +141,16 @@ pip install -r requirements.txt
 
 ---
 
-### Step 4 — Download the dataset
+### Step 4 — Dataset
 
-This project uses the **UCI SMS Spam Collection Dataset** (5,572 messages).
-You can download `spam.csv` from:
+This project uses the **UCI SMS Spam Collection Dataset** (5,572 messages), which is **included directly in this repository as `spam.csv`** in the project root folder.
+
+For reference, the original dataset sources are:
 
 | Source | Link |
 |---|---|
 | Kaggle | https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset |
 | UCI ML Repository | https://archive.ics.uci.edu/dataset/228/sms+spam+collection |
-
-> **Note:** The file must be named `spam.csv` and placed in the project root folder (same level as `train_model.py`).
-> The dataset has two columns: a label column (`ham`/`spam`) and a message column.
 
 <br>
 

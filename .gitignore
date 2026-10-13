@@ -12,6 +12,3 @@ models/*.pkl
 static/eda_plots.png
 static/evaluation_plots.png
 static/top_spam_words.png
-
-# Dataset (too large / not open-licensed for redistribution)
-spam.csv
