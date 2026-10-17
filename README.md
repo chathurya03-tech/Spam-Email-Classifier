@@ -1,4 +1,4 @@
-# 🛡️ Spam Email / SMS Classifier
+# 🛡️ Spam SMS Classifier
 
 > An end-to-end Machine Learning web application that classifies messages as **Spam** or **Ham (Not Spam)** using TF-IDF vectorisation and Multinomial Naive Bayes, deployed via a Flask web interface with real-time confidence scores.
 
