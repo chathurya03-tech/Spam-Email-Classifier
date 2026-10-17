@@ -55,7 +55,7 @@ This project builds a complete **Spam Detection pipeline** from scratch:
 ## Project Structure
 
 ```
-Spam-Email-Classifier/
+Spam-SMS-Classifier/
 │
 ├── train_model.py              ← Model training & evaluation pipeline (run this first)
 ├── app.py                      ← Flask web application & REST API
@@ -182,7 +182,7 @@ python app.py
 ### Step 3 — Open the app
 Visit **http://127.0.0.1:5000** in your web browser.
 
-Type or paste any SMS or email message and click **Classify Message** to get an instant Spam or Ham verdict with confidence score.
+Type or paste any SMS and click **Classify Message** to get an instant Spam or Ham verdict with confidence score.
 
 <br>
 
